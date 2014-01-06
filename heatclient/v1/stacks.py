@@ -25,6 +25,9 @@ class Stack(base.Resource):
     def create(self, **fields):
         return self.manager.create(self.identifier, **fields)
 
+    def preview(self, **fields):
+        return self.manager.preview(self.identifier, **fields)
+
     def update(self, **fields):
         self.manager.update(self.identifier, **fields)
 
@@ -104,6 +107,13 @@ class StackManager(base.BaseManager):
         """Create a stack."""
         headers = self.client.credentials_headers()
         resp, body = self.client.json_request('POST', '/stacks',
+                                              body=kwargs, headers=headers)
+        return body
+
+    def preview(self, **kwargs):
+        """Preview a stack."""
+        headers = self.client.credentials_headers()
+        resp, body = self.client.json_request('POST', '/stacks/preview',
                                               body=kwargs, headers=headers)
         return body
 

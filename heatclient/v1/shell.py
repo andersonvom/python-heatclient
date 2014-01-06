@@ -185,6 +185,39 @@ def do_stack_create(hc, args):
     do_stack_list(hc)
 
 
+@utils.arg('-f', '--template-file', metavar='<FILE>',
+           help='Path to the template.')
+@utils.arg('-e', '--environment-file', metavar='<FILE>',
+           help='Path to the environment.')
+@utils.arg('-u', '--template-url', metavar='<URL>',
+           help='URL of template.')
+@utils.arg('-o', '--template-object', metavar='<URL>',
+           help='URL to retrieve template object (e.g from swift)')
+@utils.arg('-c', '--create-timeout', metavar='<TIMEOUT>',
+           default=60, type=int,
+           help='Stack creation timeout in minutes. Default: 60')
+@utils.arg('-r', '--enable-rollback', default=False, action="store_true",
+           help='Enable rollback on create/update failure')
+@utils.arg('-P', '--parameters', metavar='<KEY1=VALUE1;KEY2=VALUE2...>',
+           help='Parameter values used to create the stack. '
+           'This can be specified multiple times, or once with parameters '
+           'separated by semicolon.',
+           action='append')
+@utils.arg('name', metavar='<STACK_NAME>',
+           help='Name of the stack to create.')
+def do_stack_preview(hc, args):
+    '''Create the stack.'''
+    fields = {'stack_name': args.name,
+              'timeout_mins': args.create_timeout,
+              'disable_rollback': not(args.enable_rollback),
+              'parameters': utils.format_parameters(args.parameters)}
+    _set_template_fields(hc, args, fields)
+    _process_environment_and_files(args, fields)
+
+    result = hc.stacks.preview(**fields)
+    print result
+
+
 @utils.arg('id', metavar='<NAME or ID>', nargs='+',
            help='Name or ID of stack(s) to delete.')
 def do_delete(hc, args):
