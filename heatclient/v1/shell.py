@@ -315,9 +315,15 @@ def do_list(hc, args={}):
     do_stack_list(hc, args)
 
 
+@utils.arg('-l', '--limit', metavar='<LIMIT>',
+           help='Limit the number of stacks returned')
+@utils.arg('-m', '--marker', metavar='<ID>',
+           help='Only return stacks that appear after the given stack ID')
 def do_stack_list(hc, args={}):
     '''List the user's stacks.'''
-    kwargs = {}
+    # params = utils.format_parameters(args.parameters)}
+    kwargs = {'limit': args.limit,
+              'marker': args.marker}
     stacks = hc.stacks.list(**kwargs)
     fields = ['id', 'stack_name', 'stack_status', 'creation_time']
     utils.print_list(stacks, fields, sortby=3)
