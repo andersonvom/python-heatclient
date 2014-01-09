@@ -322,7 +322,8 @@ def do_list(hc, args={}):
 @utils.arg('-f', '--filters', metavar='<KEY1=VALUE1;KEY2=VALUE2...>',
            help='Filter parameters to apply on returned stacks. '
            'This can be specified multiple times, or once with parameters '
-           'separated by semicolon.',
+           'separated by semicolon. '
+           'Valid filters include: name, status',
            action='append')
 def do_stack_list(hc, args={}):
     '''List the user's stacks.'''
@@ -339,6 +340,9 @@ def do_resource_type_list(hc, args={}):
     '''List the available resource types.'''
     kwargs = {}
     types = hc.resource_types.list(**kwargs)
+    #TODO DO SOMETHING ABOUT SORTING. THERE'S ALREADY BUILTIN
+    # SORTING WITH THIS PRINT_LIST PRETTYTABLE THING
+    # SYNC IT UP WITH WHAT'S SUPPORTED (WE ONLY SUPPORT NAME/STATUS)
     utils.print_list(types, ['resource_type'], sortby=0)
 
 
