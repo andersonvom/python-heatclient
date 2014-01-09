@@ -95,10 +95,7 @@ class StackManager(base.BaseManager):
             if value:
                 params[key] = value
 
-        filters = kwargs.get('filters', {})
-        properties = filters.pop('properties', {})
-        for key, value in properties.items():
-            params['property-%s' % key] = value
+        filters = kwargs.get('filters') or {}
         params.update(filters)
 
         return paginate(params)
